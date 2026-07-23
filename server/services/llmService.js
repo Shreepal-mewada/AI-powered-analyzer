@@ -59,46 +59,32 @@ export const invokeLLM = async ({ systemPrompt, userPrompt, temperature = 0.2, e
   const mockCost = 0.000268;
 
   const mockPayloads = {
-    parser: {
-      title: "Research Paper Analysis",
-      authors: ["Unknown Author"],
-      year: new Date().getFullYear(),
-      venue: "Academic Journal",
-      abstract: "Abstract not extracted — Mistral API unavailable. Please check your API key or retry."
-    },
-    analyzer: {
-      problemStatement: "Unable to extract — Mistral API rate limit reached. Retry after 30 seconds.",
-      coreHypothesis: "Not specified in document (API unavailable).",
-      methodology: "Not specified in document (API unavailable).",
-      experiments: "Not specified in document (API unavailable).",
-      keyFindings: "Not specified in document (API unavailable)."
-    },
-    summary: {
-      executiveSummary: "AI extraction unavailable — Mistral API rate limit (429) reached. Please wait 30–60 seconds and re-upload your document. Check your Mistral API plan at console.mistral.ai for higher rate limits."
-    },
-    citation: {
+    unified: {
+      metadata: {
+        title: "API Rate Limit — Retry Required",
+        authors: ["N/A"],
+        year: new Date().getFullYear(),
+        venue: "N/A"
+      },
+      executiveSummary: "⚠️ Mistral API rate limit reached. Your API key is valid but the free tier allows only a limited number of requests per minute. Please wait 30–60 seconds and re-upload your document.",
+      analysis: {
+        problemStatement: "Unavailable — API rate limited. Retry in 30–60 seconds.",
+        coreHypothesis: "Unavailable — API rate limited. Retry in 30–60 seconds.",
+        methodology: "Unavailable — API rate limited. Retry in 30–60 seconds.",
+        experiments: "Unavailable — API rate limited. Retry in 30–60 seconds.",
+        keyFindings: "Unavailable — API rate limited. Retry in 30–60 seconds."
+      },
       citations: [
-        { title: "Citations unavailable — API rate limit reached", authors: "N/A", year: "N/A", relevance: "Retry after 30 seconds." }
-      ]
-    },
-    insight: {
+        { title: "Citations unavailable", authors: "N/A", year: "N/A", relevance: "API rate limited — retry in 30–60 seconds." }
+      ],
       keyInsights: [
-        { takeaway: "AI insights unavailable — Mistral API rate limit reached.", implication: "Retry after 30-60 seconds.", application: "Check console.mistral.ai for usage." }
+        { takeaway: "API rate limit reached.", implication: "Wait 30–60 seconds and re-upload.", application: "Upgrade plan at console.mistral.ai for higher limits." }
       ]
-    },
-    reviewer: {
-      accuracyScore: 5.0,
-      completenessScore: 5.0,
-      clarityScore: 5.0,
-      overallScore: 5.0,
-      confidenceScore: 50,
-      approved: true,
-      feedback: "Fallback mode — Mistral API unavailable."
     }
   };
 
+  const payload = mockPayloads[expectedAgentType] || mockPayloads.unified;
 
-  const payload = mockPayloads[expectedAgentType] || mockPayloads.analyzer;
 
   return {
     rawOutput: JSON.stringify(payload, null, 2),
