@@ -1,10 +1,38 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FloatingExportBar } from '../components/common/FloatingExportBar';
 import { useAppContext } from '../context/AppContext';
 
 export const ReportPage = () => {
+  const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('all');
-  const { currentBrief } = useAppContext();
+  const { currentBrief, currentDocument } = useAppContext();
+
+  if (!currentDocument) {
+    return (
+      <div className="max-w-xl mx-auto px-6 pt-24 pb-28 text-center animate-noteo-fade">
+        <div className="noteo-card p-10 space-y-6">
+          <div className="w-16 h-16 bg-amber-500/10 text-amber-400 rounded-2xl flex items-center justify-center mx-auto text-3xl border border-amber-500/30">
+            📄
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-xl font-extrabold text-white font-heading">
+              No Document Uploaded Yet
+            </h2>
+            <p className="text-xs text-zinc-400 max-w-sm mx-auto leading-relaxed">
+              Please upload a research paper (PDF) or import an arXiv manuscript first to generate and view the structured AI synthesis brief.
+            </p>
+          </div>
+          <button
+            onClick={() => navigate('/upload')}
+            className="px-6 py-3 noteo-primary-btn text-xs font-bold hover:bg-zinc-200 cursor-pointer shadow-md active:scale-98 transition-all"
+          >
+            Upload Document Now →
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const brief = currentBrief || {};
   const { metadata, executiveSummary, researchAnalysis, citations, keyInsights, reviewScores, docType } = brief;

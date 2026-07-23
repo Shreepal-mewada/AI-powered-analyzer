@@ -1,68 +1,86 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import SoftAurora from '../components/ui/SoftAurora';
+import CurvedLoop from '../components/ui/CurvedLoop';
 
 export const HomePage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="space-y-24 pt-16 pb-24 animate-noteo-fade">
+    <div className="relative space-y-24 pt-16 pb-24 animate-noteo-fade overflow-hidden">
       
-      {/* HERO SECTION (Directly matching Noteo reference image) */}
-      <section className="relative min-h-[75vh] flex flex-col items-center justify-center text-center px-6 max-w-4xl mx-auto space-y-8">
-        
+      {/* Soft Aurora Background Component */}
+      <div className="absolute inset-0 pointer-events-none opacity-40 z-0 h-[100vh]">
+        <SoftAurora
+          speed={0.6}
+          scale={1.5}
+          brightness={0.8}
+          color1="#FF9500"
+          color2="#8B5CF6"
+          noiseFrequency={2.5}
+          noiseAmplitude={1.0}
+          bandHeight={0.5}
+          bandSpread={1.0}
+          octaveDecay={0.1}
+          layerOffset={0}
+          colorSpeed={1.0}
+          enableMouseInteraction={true}
+          mouseInfluence={0.25}
+        />
+      </div>
+
+      {/* HERO SECTION */}
+      <section className="relative min-h-[75vh] flex flex-col items-center justify-center text-center px-6 max-w-4xl mx-auto space-y-8 z-10">
+
         {/* Glow Background Effect */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-amber-500/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
 
         <div className="relative z-10 space-y-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold tracking-wide font-heading">
+            <span>✨</span> Multi-Agent Academic Research Intelligence
+          </div>
+
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight font-heading leading-tight">
-            AI Powered <span className="text-amber-500 font-extrabold noteo-amber-glow">Summaries</span>
+            Understand Complex <span className="text-amber-500 font-extrabold noteo-amber-glow">Research Papers</span> in Seconds
           </h1>
 
-          <p className="text-base sm:text-xl text-zinc-400 font-normal max-w-2xl mx-auto leading-relaxed">
-            From meetings and emails to research papers and reports, our AI distills complex information into clear, concise summaries — so you're always in control and up to speed.
+          <p className="text-base sm:text-lg text-zinc-300 font-normal max-w-2xl mx-auto leading-relaxed">
+            Upload any PDF manuscript or import an arXiv paper. ScholarSense deploys specialized AI agents to extract core methodology, audit claims, and generate verified executive briefs.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
             <button
               onClick={() => navigate('/upload')}
-              className="px-8 py-3.5 noteo-pill-btn text-sm font-medium hover:border-white/40 cursor-pointer shadow-lg active:scale-98 transition-all"
+              className="px-8 py-3.5 noteo-primary-btn text-sm font-bold cursor-pointer hover:bg-zinc-200 active:scale-98 transition-all shadow-xl"
             >
-              Sign in
-            </button>
-            <button
-              onClick={() => navigate('/upload')}
-              className="px-8 py-3.5 noteo-pill-btn text-sm font-medium hover:border-white/40 cursor-pointer shadow-lg active:scale-98 transition-all bg-zinc-800/80 hover:bg-zinc-700"
-            >
-              Summarize Now
+              Analyze Paper Now →
             </button>
           </div>
         </div>
 
-        {/* Bottom Hero "Powered By" Bar */}
-        <div className="relative z-10 pt-20 border-t border-white/10 w-full max-w-3xl space-y-6">
-          <p className="text-xs text-zinc-500 font-medium tracking-wide uppercase">Powered by</p>
-          <div className="flex flex-wrap items-center justify-center gap-10 sm:gap-16 opacity-70 hover:opacity-100 transition-opacity">
-            <div className="flex items-center gap-2 text-zinc-300 font-bold text-sm font-heading">
-              <span className="text-lg">Oll·1</span> Llama 3
-            </div>
-            <div className="flex items-center gap-2 text-zinc-300 font-bold text-sm font-heading">
-              <span className="w-5 h-5 rounded border border-white/30 flex items-center justify-center text-[10px]">⚙</span> OpenAI GPT-4
-            </div>
-            <div className="flex items-center gap-2 text-zinc-300 font-bold text-sm font-heading">
-              <span className="w-5 h-5 rounded bg-zinc-800 flex items-center justify-center text-[10px] text-amber-500 font-mono">AI</span> Anthropic Claude
-            </div>
-            <div className="flex items-center gap-2 text-zinc-300 font-bold text-sm font-heading">
-              <span className="w-5 h-5 rounded border border-white/30 flex items-center justify-center text-[10px]">🤖</span> Mistral AI
-            </div>
+        {/* Curved Loop Interactive Marquee for AI Models */}
+        <div className="relative z-10 pt-10 border-t border-white/10 w-full max-w-5xl space-y-4">
+          <p className="text-xs text-amber-500 font-bold tracking-widest uppercase font-heading">
+            Powered by Leading LLM Backbones
+          </p>
+          <div className="opacity-90 hover:opacity-100 transition-opacity">
+            <CurvedLoop
+              marqueeText="Llama 3 ✦ OpenAI GPT-4 ✦ Anthropic Claude ✦ Mistral AI ✦"
+              speed={1.5}
+              curveAmount={120}
+              direction="left"
+              interactive={true}
+              className="text-amber-400/90 font-extrabold"
+            />
           </div>
         </div>
 
       </section>
 
       {/* HOW IT WORKS SECTION */}
-      <section className="max-w-5xl mx-auto px-6 space-y-12" id="how-it-works">
+      <section className="max-w-5xl mx-auto px-6 space-y-12 relative z-10" id="how-it-works">
         <div className="text-center space-y-3">
-          <span className="text-xs font-bold text-amber-500 uppercase tracking-widest font-heading">Process</span>
+          <span className="text-xs font-bold text-amber-500 uppercase tracking-widest font-heading">Workflow</span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white font-heading tracking-tight">
             How ScholarSense Works
           </h2>
@@ -72,7 +90,7 @@ export const HomePage = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          
+
           <div className="noteo-card p-8 space-y-4">
             <div className="w-10 h-10 rounded-xl bg-zinc-800 border border-white/10 text-white font-mono font-bold flex items-center justify-center">
               01
@@ -107,11 +125,11 @@ export const HomePage = () => {
       </section>
 
       {/* CTA SECTION */}
-      <section className="max-w-4xl mx-auto px-6 text-center">
+      <section className="max-w-4xl mx-auto px-6 text-center relative z-10">
         <div className="noteo-card p-12 space-y-6 relative overflow-hidden">
           <div className="space-y-2">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white font-heading">
-              Ready to summarize your research?
+              Accelerate your literature review
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400 max-w-md mx-auto">
               Start parsing research papers with multi-agent precision today. No setup required.

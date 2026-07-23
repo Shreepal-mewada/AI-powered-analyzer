@@ -51,6 +51,7 @@ export const AppProvider = ({ children }) => {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [currentBrief, setCurrentBrief] = useState(defaultBrief);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [hasActiveUploadSession, setHasActiveUploadSession] = useState(false);
   const [logs, setLogs] = useState([
     '[INIT] ScholarSense Multi-Agent Engine v2.0 Ready',
     '[AGENT] Mistral AI Context Router Initialized',
@@ -63,8 +64,10 @@ export const AppProvider = ({ children }) => {
 
   const uploadAndAnalyze = async (uploadPayload) => {
     setIsProcessing(true);
+    setHasActiveUploadSession(true);
     setActiveStepIndex(1);
     addLog('Step 1/8 [Upload]: Ingestion request received...');
+
 
     try {
       let docRes;
@@ -246,6 +249,8 @@ export const AppProvider = ({ children }) => {
         activeStepIndex,
         currentBrief,
         isProcessing,
+        hasActiveUploadSession,
+        setHasActiveUploadSession,
         logs,
         addLog,
         uploadAndAnalyze

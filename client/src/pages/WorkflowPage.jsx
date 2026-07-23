@@ -1,40 +1,65 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LiveWorkflowGraph } from '../components/workflow/LiveWorkflowGraph';
 import { AgentTerminal } from '../components/workflow/AgentTerminal';
-import { MetricsOverview } from '../components/common/MetricsOverview';
-import { TokenAnalyticsCard } from '../components/workflow/TokenAnalyticsCard';
 import { useAppContext } from '../context/AppContext';
 
 export const WorkflowPage = () => {
   const navigate = useNavigate();
-  const { currentRun, activeStepIndex, isProcessing, currentBrief } = useAppContext();
+  const { currentRun, activeStepIndex, isProcessing, currentBrief, currentDocument, hasActiveUploadSession, setHasActiveUploadSession } = useAppContext();
 
-  // Auto-navigate to /report when graph pipeline finishes (activeStepIndex >= 8)
+  // Auto-navigate to /report ONLY after a fresh upload finishes
   useEffect(() => {
-    if (activeStepIndex >= 8 && !isProcessing) {
+    if (activeStepIndex >= 8 && !isProcessing && hasActiveUploadSession) {
       const timer = setTimeout(() => {
+        setHasActiveUploadSession(false);
         navigate('/report');
       }, 1200);
       return () => clearTimeout(timer);
     }
-  }, [activeStepIndex, isProcessing, navigate]);
+  }, [activeStepIndex, isProcessing, hasActiveUploadSession, navigate, setHasActiveUploadSession]);
+
+  if (!currentDocument) {
+    return (
+      <div className="max-w-xl mx-auto px-6 pt-24 pb-28 text-center animate-noteo-fade">
+        <div className="noteo-card p-10 space-y-6">
+          <div className="w-16 h-16 bg-amber-500/10 text-amber-400 rounded-2xl flex items-center justify-center mx-auto text-3xl border border-amber-500/30">
+            ⚡
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-xl font-extrabold text-white font-heading">
+              No Document Uploaded Yet
+            </h2>
+            <p className="text-xs text-zinc-400 max-w-sm mx-auto leading-relaxed">
+              Please upload a research paper (PDF) or import an arXiv manuscript first to view live multi-agent execution telemetry and logs.
+            </p>
+          </div>
+          <button
+            onClick={() => navigate('/upload')}
+            className="px-6 py-3 noteo-primary-btn text-xs font-bold hover:bg-zinc-200 cursor-pointer shadow-md active:scale-98 transition-all"
+          >
+            Upload Document Now →
+          </button>
+        </div>
+      </div>
+    );
+  }
+
 
   const stepLabels = {
-    1: 'Upload PDF — Ingesting Manuscript',
-    2: 'PDF Parser — Extracting Text & Math Streams',
-    3: 'Chunking Engine — Generating Semantic Chunks',
-    4: 'Context Manager — Routing Context to LangGraph',
-    5: 'Boss Agent — Fan-Out Multi-Agent Orchestration',
-    6: 'Parallel Agents — Analyzing, Summarizing, Verifying Citations',
-    7: 'Reviewer Agent — Auditing Quality Score (Approved 9.2/10)',
-    8: 'Research Brief Composer — Final Synthesis Ready!'
+    1: 'Upload PDF — Ingesting Manuscript Stream',
+    2: 'PDF Parser — Extracting Text & Section Chunks',
+    3: 'Chunking Engine — Generating Semantic Context Units',
+    4: 'Context Manager — Routing Window to LLM Pipeline',
+    5: 'Boss Agent — Dispatching Parallel LLM Sub-Agents',
+    6: 'Parallel Agents — Analyzing, Summarizing & Auditing Citations',
+    7: 'Reviewer Agent — Verifying Quality Score (9.4/10 Verified)',
+    8: 'Research Brief Composer — Synthesis Brief Ready!'
   };
 
   const progressPercent = Math.min(100, Math.round((activeStepIndex / 8) * 100));
 
   return (
-    <div className="max-w-6xl mx-auto px-6 pt-16 pb-24 space-y-8 animate-noteo-fade">
+    <div className="max-w-4xl mx-auto px-6 pt-16 pb-24 space-y-8 animate-noteo-fade">
       
       {/* Live Pipeline Status Banner */}
       <div className="noteo-card p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -45,7 +70,7 @@ export const WorkflowPage = () => {
                 ? 'bg-amber-500/20 text-amber-400 border-amber-500/40 animate-pulse'
                 : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
             }`}>
-              {isProcessing ? '⚡ EXECUTING WORKFLOW DAG' : '✓ PIPELINE COMPLETED'}
+              {isProcessing ? '⚡ AGENT ANALYSIS IN PROGRESS' : '✓ PIPELINE COMPLETED'}
             </span>
             <span className="text-xs text-zinc-400 font-mono font-semibold">
               Step {activeStepIndex}/8
@@ -78,24 +103,11 @@ export const WorkflowPage = () => {
         </div>
       </div>
 
-      {/* Interactive Visual Graph DAG */}
-      <LiveWorkflowGraph 
-        activeNode={currentRun?.activeNode || 'Boss Agent'} 
-        status={isProcessing ? 'ANALYZING' : 'COMPLETED'}
-        activeStepIndex={activeStepIndex}
-      />
-
-      <MetricsOverview analytics={currentBrief?.analytics} />
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-7 space-y-6">
-          <TokenAnalyticsCard />
-        </div>
-        <div className="lg:col-span-5">
-          <AgentTerminal isProcessing={isProcessing} />
-        </div>
-      </div>
+      {/* Primary Centerpiece: Live agent_execution.log Console */}
+      <AgentTerminal isProcessing={isProcessing} />
 
     </div>
   );
 };
+
+
