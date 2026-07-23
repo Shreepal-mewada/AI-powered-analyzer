@@ -38,10 +38,10 @@ export const Navbar = () => {
         {/* Brand Logo */}
         <NavLink to="/" className="flex items-center gap-3 group">
           <div className="w-8 h-8 rounded-lg bg-white text-black flex items-center justify-center font-extrabold text-sm font-heading shadow-md">
-            N
+            S
           </div>
           <span className="font-extrabold text-white text-lg tracking-tight font-heading group-hover:text-amber-500 transition-colors">
-            ScholarSense
+            Vilambo
           </span>
         </NavLink>
 

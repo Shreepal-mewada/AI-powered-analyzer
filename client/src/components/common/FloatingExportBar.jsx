@@ -1,16 +1,38 @@
 import React, { useState } from 'react';
+import { Copy, Check, FileText, Download, Code } from 'lucide-react';
 
 export const FloatingExportBar = ({ brief }) => {
   const [copied, setCopied] = useState(false);
 
+  const getMarkdownText = (b) => {
+    if (b?.markdownContent) return b.markdownContent;
+    const title = b?.metadata?.title || 'Research Manuscript Synthesis Brief';
+    const authors = Array.isArray(b?.metadata?.authors) ? b.metadata.authors.join(', ') : (b?.metadata?.authors || 'Academic Researchers');
+    const venue = b?.metadata?.venue || 'NeurIPS / Academic Conference';
+    const summary = typeof b?.executiveSummary === 'string' ? b.executiveSummary : (b?.executiveSummary?.paragraph || b?.executiveSummary?.overview || 'Executive summary synthesized by multi-agent LLM workflow.');
+
+    let insights = '';
+    if (Array.isArray(b?.keyInsights)) {
+      insights = b.keyInsights.map(i => `- ${typeof i === 'string' ? i : (i.takeaway || i.finding || i.text || JSON.stringify(i))}`).join('\n');
+    }
+
+    return `# ${title}\n\n**Authors:** ${authors}\n**Venue:** ${venue}\n\n## Executive Summary\n${summary}\n\n## Key Research Insights\n${insights || 'Verified key insights compiled.'}\n`;
+  };
+
   const handleCopy = () => {
-    navigator.clipboard.writeText(brief?.markdownContent || 'Research Brief Content');
+    const text = getMarkdownText(brief);
+    navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleDownload = (format) => {
-    let content = brief?.markdownContent || '';
+    if (format === 'pdf') {
+      window.print();
+      return;
+    }
+
+    let content = getMarkdownText(brief);
     let mime = 'text/markdown';
     let filename = `Research_Brief.${format}`;
 
@@ -29,59 +51,48 @@ export const FloatingExportBar = ({ brief }) => {
   };
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 max-w-[95vw]">
-      <div className="bg-slate-900 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-full flex items-center gap-2 sm:gap-4 shadow-2xl ring-1 ring-white/10 backdrop-blur-md">
-        
-        <span className="text-xs sm:text-sm font-semibold whitespace-nowrap pl-1">
-          Export Result
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 max-w-[95vw] floating-export-bar">
+      <div className="bg-zinc-900 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-full flex items-center gap-2 sm:gap-4 shadow-2xl ring-1 ring-white/10 backdrop-blur-md">
+
+        <span className="text-xs sm:text-sm font-semibold whitespace-nowrap pl-1 text-zinc-300">
+          Export Brief
         </span>
-        
+
         <div className="h-5 w-[1px] bg-white/20"></div>
 
         <div className="flex items-center gap-1 sm:gap-2">
           <button
             onClick={handleCopy}
-            className="p-1.5 sm:px-3 sm:py-1.5 hover:bg-white/10 rounded-full flex items-center gap-1.5 transition-colors cursor-pointer text-xs"
+            className="px-3 py-1.5 hover:bg-white/10 rounded-full flex items-center gap-1.5 transition-colors cursor-pointer text-xs font-medium"
           >
-            <span className="material-symbols-outlined text-[18px]">
-              {copied ? 'check' : 'content_copy'}
-            </span>
-            <span className="hidden sm:inline font-medium">{copied ? 'Copied' : 'Copy'}</span>
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-zinc-300" />}
+            <span>{copied ? 'Copied' : 'Copy'}</span>
           </button>
 
           <button
             onClick={() => handleDownload('md')}
-            className="p-1.5 sm:px-3 sm:py-1.5 hover:bg-white/10 rounded-full flex items-center gap-1.5 transition-colors cursor-pointer text-xs"
+            className="px-3 py-1.5 hover:bg-white/10 rounded-full flex items-center gap-1.5 transition-colors cursor-pointer text-xs font-medium"
           >
-            <span className="material-symbols-outlined text-[18px]">markdown</span>
-            <span className="hidden sm:inline font-medium">Markdown</span>
+            <FileText className="w-3.5 h-3.5 text-amber-400" />
+            <span>Markdown</span>
           </button>
 
           <button
             onClick={() => handleDownload('pdf')}
-            className="p-1.5 sm:px-3 sm:py-1.5 hover:bg-white/10 rounded-full flex items-center gap-1.5 transition-colors cursor-pointer text-xs"
+            className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-black rounded-full flex items-center gap-1.5 transition-colors cursor-pointer text-xs font-bold shadow-md active:scale-95"
           >
-            <span className="material-symbols-outlined text-[18px]">picture_as_pdf</span>
-            <span className="hidden sm:inline font-medium">PDF</span>
+            <Download className="w-3.5 h-3.5" />
+            <span>PDF</span>
           </button>
 
           <button
             onClick={() => handleDownload('json')}
-            className="p-1.5 sm:px-3 sm:py-1.5 hover:bg-white/10 rounded-full flex items-center gap-1.5 transition-colors cursor-pointer text-xs"
+            className="px-3 py-1.5 hover:bg-white/10 rounded-full flex items-center gap-1.5 transition-colors cursor-pointer text-xs font-medium"
           >
-            <span className="material-symbols-outlined text-[18px]">data_object</span>
-            <span className="hidden sm:inline font-medium">JSON</span>
+            <Code className="w-3.5 h-3.5 text-blue-400" />
+            <span>JSON</span>
           </button>
         </div>
-
-        <div className="h-5 w-[1px] bg-white/20"></div>
-
-        <button 
-          onClick={() => alert('Shareable URL link copied to clipboard!')}
-          className="p-1.5 bg-blue-600 hover:bg-blue-500 transition-colors rounded-full text-white cursor-pointer"
-        >
-          <span className="material-symbols-outlined text-[18px]">share</span>
-        </button>
 
       </div>
     </div>

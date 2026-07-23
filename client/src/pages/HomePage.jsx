@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import SoftAurora from '../components/ui/SoftAurora';
 import CurvedLoop from '../components/ui/CurvedLoop';
+import CircularText from '../components/ui/CircularText';
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -35,25 +36,29 @@ export const HomePage = () => {
         {/* Glow Background Effect */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-amber-500/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
 
-        <div className="relative z-10 space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold tracking-wide font-heading">
-            <span>✨</span> Multi-Agent Academic Research Intelligence
-          </div>
+        <div className="relative z-10 space-y-8 flex flex-col items-center">
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight font-heading leading-tight">
-            Understand Complex <span className="text-amber-500 font-extrabold noteo-amber-glow">Research Papers</span> in Seconds
-          </h1>
+          {/* Circular Text Main Title Component */}
+          <div className="flex justify-center my-4 py-2">
+            <CircularText
+              text="AI*POWERED*RESEARCH*PAPER*ANALYZER*"
+              spinDuration={20}
+              onHover="speedUp"
+              className="text-amber-400"
+            />
+          </div>
 
           <p className="text-base sm:text-lg text-zinc-300 font-normal max-w-2xl mx-auto leading-relaxed">
             Upload any PDF manuscript or import an arXiv paper. ScholarSense deploys specialized AI agents to extract core methodology, audit claims, and generate verified executive briefs.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
             <button
               onClick={() => navigate('/upload')}
-              className="px-8 py-3.5 noteo-primary-btn text-sm font-bold cursor-pointer hover:bg-zinc-200 active:scale-98 transition-all shadow-xl"
+              className="px-8 py-3.5 noteo-primary-btn text-sm font-bold cursor-pointer group flex items-center gap-2"
             >
-              Analyze Paper Now →
+              <span>Analyze Paper Now</span>
+              <span className="group-hover:translate-x-1 transition-transform">→</span>
             </button>
           </div>
         </div>
@@ -95,7 +100,7 @@ export const HomePage = () => {
             <div className="w-10 h-10 rounded-xl bg-zinc-800 border border-white/10 text-white font-mono font-bold flex items-center justify-center">
               01
             </div>
-            <h3 className="text-lg font-bold text-white font-heading">1. Upload Manuscript</h3>
+            <h3 className="text-lg font-bold text-white font-heading">1. Ingest Manuscript</h3>
             <p className="text-xs text-zinc-400 leading-relaxed">
               Drop any PDF research paper or paste an arXiv ID. Our engine parses sections, math equations, and tables cleanly.
             </p>
@@ -137,9 +142,10 @@ export const HomePage = () => {
           </div>
           <button
             onClick={() => navigate('/upload')}
-            className="px-8 py-3.5 noteo-primary-btn text-sm font-bold cursor-pointer hover:bg-zinc-200 active:scale-98 transition-all inline-block"
+            className="px-8 py-3.5 noteo-primary-btn text-sm font-bold cursor-pointer group inline-flex items-center gap-2"
           >
-            Start Analyzing Now
+            <span>Start Analyzing Now</span>
+            <span className="group-hover:translate-x-1 transition-transform">→</span>
           </button>
         </div>
       </section>
