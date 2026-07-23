@@ -1,232 +1,251 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export const LiveWorkflowGraph = ({ activeNode = 'Boss Agent', status = 'ANALYZING', activeStepIndex = 3 }) => {
+  const [selectedStage, setSelectedStage] = useState(null);
 
-  // Map step index (1-8) to active workflow card
-  // Step 1-2: USER INPUT & FRONTEND
-  // Step 3-4: FRONTEND -> AGENT ENGINE
-  // Step 5-7: AGENT ENGINE (Parsing, Fan-Out, Reviewing)
-  // Step 8: RESPONSE & Loopback
-  const getCardActiveState = (cardKey) => {
-    switch (cardKey) {
-      case 'user_input':
-        return activeStepIndex >= 1 ? (activeStepIndex <= 2 ? 'ACTIVE' : 'COMPLETED') : 'PENDING';
-      case 'frontend':
-        return activeStepIndex >= 2 ? (activeStepIndex <= 4 ? 'ACTIVE' : 'COMPLETED') : 'PENDING';
-      case 'agent_engine':
-        return activeStepIndex >= 4 ? (activeStepIndex <= 7 ? 'ACTIVE' : 'COMPLETED') : 'PENDING';
-      case 'response':
-        return activeStepIndex >= 8 ? 'COMPLETED' : 'PENDING';
-      default:
-        return 'PENDING';
+  // 4 Primary Architecture Stages
+  const stages = [
+    {
+      id: 'ingestion',
+      stageNum: '01',
+      title: 'Document Ingestion',
+      subtitle: 'PDF Parsing & Semantic Chunking',
+      stepRange: [1, 3],
+      nodes: [
+        { label: 'PDF Parser', desc: 'Byte stream & math formula parsing', step: 2 },
+        { label: 'Chunking Engine', desc: 'Semantic section segmentation', step: 3 }
+      ],
+      icon: (
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <polyline points="10 9 9 9 8 9" />
+        </svg>
+      )
+    },
+    {
+      id: 'routing',
+      stageNum: '02',
+      title: 'Context Orchestration',
+      subtitle: 'LangGraph Router & Boss Agent',
+      stepRange: [4, 5],
+      nodes: [
+        { label: 'Context Router', desc: 'Context window filtering & token optimization', step: 4 },
+        { label: 'Boss Agent', desc: 'State-graph node dispatcher', step: 5 }
+      ],
+      icon: (
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <circle cx="12" cy="12" r="3" />
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </svg>
+      )
+    },
+    {
+      id: 'parallel',
+      stageNum: '03',
+      title: 'Parallel Agent Execution',
+      subtitle: 'Fan-Out LLM Sub-Agents',
+      stepRange: [6, 6],
+      nodes: [
+        { label: 'Analyzer Agent', desc: 'Technical extraction', step: 6 },
+        { label: 'Summarizer Agent', desc: 'Executive synthesis', step: 6 },
+        { label: 'Citation Agent', desc: 'Reference & baseline audit', step: 6 },
+        { label: 'Insight Agent', desc: 'Tradeoffs & takeaways', step: 6 }
+      ],
+      icon: (
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <polygon points="12 2 2 7 12 12 22 7 12 2" />
+          <polyline points="2 17 12 22 22 17" />
+          <polyline points="2 12 12 17 22 12" />
+        </svg>
+      )
+    },
+    {
+      id: 'synthesis',
+      stageNum: '04',
+      title: 'Quality Audit & Brief',
+      subtitle: 'Peer Reviewer & Composer',
+      stepRange: [7, 8],
+      nodes: [
+        { label: 'Reviewer Agent', desc: 'Quality score validation', step: 7 },
+        { label: 'Brief Composer', desc: 'Final synthesis brief', step: 8 }
+      ],
+      icon: (
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
+        </svg>
+      )
     }
-  };
-
-  const stepsList = [
-    { step: 1, label: '1. Ingest PDF', node: 'Upload PDF' },
-    { step: 2, label: '2. Extract Stream', node: 'PDF Parser' },
-    { step: 3, label: '3. Chunking', node: 'Chunking Engine' },
-    { step: 4, label: '4. Context Route', node: 'Context Manager' },
-    { step: 5, label: '5. Boss Orchestrator', node: 'Boss Agent' },
-    { step: 6, label: '6. Parallel Agents', node: 'Sub-Agents Fan-Out' },
-    { step: 7, label: '7. Quality Audit', node: 'Reviewer Agent' },
-    { step: 8, label: '8. Synthesis Ready', node: 'Brief Composer' }
   ];
 
+  const getStageStatus = (stage) => {
+    const [start, end] = stage.stepRange;
+    if (activeStepIndex > end) return 'COMPLETED';
+    if (activeStepIndex >= start && activeStepIndex <= end) return 'ACTIVE';
+    return 'QUEUED';
+  };
+
   return (
-    <div className="noteo-card p-6 sm:p-8 space-y-8 relative overflow-hidden bg-[#0D0D11] border border-white/10">
+    <div className="noteo-card p-6 sm:p-8 space-y-8 bg-[#0E0E12] border border-white/10 rounded-2xl relative overflow-hidden">
       
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></span>
-            <h3 className="text-lg font-bold text-white font-heading tracking-tight">
-              AI Multi-Agent Visual Workflow Architecture
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+            <h3 className="text-base sm:text-lg font-bold text-white font-heading tracking-tight">
+              Multi-Agent Graph Execution Architecture
             </h3>
           </div>
-          <p className="text-xs text-zinc-400">
-            Real-time visual node execution & feedback loop state machine
+          <p className="text-xs text-zinc-400 font-medium">
+            State-based LangGraph DAG pipeline execution & node transitions
           </p>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
-          <span className={`px-3.5 py-1 text-xs font-bold font-mono rounded-full border transition-all ${
+        <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2 px-3 py-1 bg-zinc-900 border border-white/10 rounded-full text-xs font-mono">
+            <span className="text-zinc-500">Active Node:</span>
+            <span className="text-amber-400 font-bold">{activeNode}</span>
+          </div>
+
+          <span className={`px-3 py-1 text-xs font-bold font-mono rounded-full border transition-all ${
             status === 'COMPLETED' || activeStepIndex >= 8
-              ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
-              : 'bg-amber-500/20 text-amber-400 border-amber-500/40 animate-pulse'
+              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+              : 'bg-amber-500/10 text-amber-400 border-amber-500/30 animate-pulse'
           }`}>
-            {status === 'COMPLETED' || activeStepIndex >= 8 ? '✓ WORKFLOW COMPLETED' : `⚡ EXECUTING NODE ${activeStepIndex}/8`}
+            {status === 'COMPLETED' || activeStepIndex >= 8 ? '✓ PIPELINE READY' : `⚡ STEP ${Math.min(8, Math.floor(activeStepIndex))}/8`}
           </span>
         </div>
       </div>
 
-      {/* Main Flow Canvas matching attached screenshot */}
-      <div className="relative py-8 px-2 bg-[radial-gradient(#ffffff15_1px,transparent_1px)] [background-size:18px_18px] rounded-3xl border border-white/5 bg-zinc-950/60">
-        
-        {/* SVG Animated Connector Paths */}
-        <div className="hidden lg:block absolute inset-0 pointer-events-none z-0">
-          <svg className="w-full h-full" viewBox="0 0 900 240" fill="none" preserveAspectRatio="none">
-            <defs>
-              <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1 L 8 5 L 0 9 z" fill="#71717A" />
-              </marker>
-              <marker id="arrow-active" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1 L 8 5 L 0 9 z" fill="#F59E0B" />
-              </marker>
-            </defs>
+      {/* 4 Architectural Stages Horizontal Flow */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
+        {stages.map((stg, idx) => {
+          const stStatus = getStageStatus(stg);
+          const isSelected = selectedStage === stg.id;
 
-            {/* Path 1: USER INPUT <--> FRONTEND */}
-            <path
-              d="M 195 90 L 265 90"
-              stroke={activeStepIndex >= 1 ? '#F59E0B' : '#3F3F46'}
-              strokeWidth="2.5"
-              strokeDasharray="6 6"
-              markerEnd={activeStepIndex >= 1 ? 'url(#arrow-active)' : 'url(#arrow)'}
-              className={activeStepIndex >= 1 ? 'animate-dash-flow' : ''}
-            />
-
-            {/* Path 2: FRONTEND -> CREW AI AGENT */}
-            <path
-              d="M 425 90 L 495 90"
-              stroke={activeStepIndex >= 3 ? '#F59E0B' : '#3F3F46'}
-              strokeWidth="2.5"
-              strokeDasharray="6 6"
-              markerEnd={activeStepIndex >= 3 ? 'url(#arrow-active)' : 'url(#arrow)'}
-              className={activeStepIndex >= 3 ? 'animate-dash-flow' : ''}
-            />
-
-            {/* Path 3: CREW AI AGENT -> RESPONSE */}
-            <path
-              d="M 655 90 L 725 90"
-              stroke={activeStepIndex >= 7 ? '#F59E0B' : '#3F3F46'}
-              strokeWidth="2.5"
-              strokeDasharray="6 6"
-              markerEnd={activeStepIndex >= 7 ? 'url(#arrow-active)' : 'url(#arrow)'}
-              className={activeStepIndex >= 7 ? 'animate-dash-flow' : ''}
-            />
-
-            {/* Path 4: Bottom Feedback Loop Arc (RESPONSE -> FRONTEND) */}
-            <path
-              d="M 790 145 C 790 225, 345 225, 345 145"
-              stroke={activeStepIndex >= 8 ? '#10B981' : '#3F3F46'}
-              strokeWidth="2.5"
-              strokeDasharray="6 6"
-              markerEnd={activeStepIndex >= 8 ? 'url(#arrow-active)' : 'url(#arrow)'}
-              className={activeStepIndex >= 8 ? 'animate-dash-flow' : ''}
-            />
-          </svg>
-        </div>
-
-        {/* 4 Primary Flow Cards (Styled like the exact attached lavender screenshot) */}
-        <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto px-4">
-          
-          {/* Node 1: USER INPUT */}
-          <div className={`p-6 rounded-[24px] flex flex-col items-center justify-between text-center min-h-[170px] transition-all duration-300 shadow-xl ${
-            getCardActiveState('user_input') === 'ACTIVE'
-              ? 'bg-[#B4BEFE] ring-4 ring-amber-400 scale-105 shadow-[0_0_30px_rgba(245,158,11,0.4)]'
-              : 'bg-[#B4BEFE]/95 hover:bg-[#B4BEFE]'
-          }`}>
-            <div className="w-14 h-14 rounded-full bg-black/10 flex items-center justify-center mb-3">
-              <svg className="w-8 h-8 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <circle cx="12" cy="10" r="3" />
-                <path d="M7 18.5c1.5-2.5 3.5-3.5 5-3.5s3.5 1 5 3.5" />
-              </svg>
-            </div>
-            <span className="text-xs font-black uppercase tracking-wider text-black font-heading">
-              USER INPUT
-            </span>
-          </div>
-
-          {/* Node 2: FRONTEND */}
-          <div className={`p-6 rounded-[24px] flex flex-col items-center justify-between text-center min-h-[170px] transition-all duration-300 shadow-xl ${
-            getCardActiveState('frontend') === 'ACTIVE'
-              ? 'bg-[#B4BEFE] ring-4 ring-amber-400 scale-105 shadow-[0_0_30px_rgba(245,158,11,0.4)]'
-              : 'bg-[#B4BEFE]/95 hover:bg-[#B4BEFE]'
-          }`}>
-            <div className="w-14 h-14 rounded-full bg-black/10 flex items-center justify-center mb-3">
-              <div className="flex items-center gap-1.5 text-black">
-                <span className="text-xl font-black font-heading leading-none">N</span>
-                <span className="text-xs font-bold border border-black/40 px-1 py-0.5 rounded">▲</span>
-              </div>
-            </div>
-            <span className="text-xs font-black uppercase tracking-wider text-black font-heading">
-              FRONTEND
-            </span>
-          </div>
-
-          {/* Node 3: CREW AI AGENT / LANGGRAPH */}
-          <div className={`p-6 rounded-[24px] flex flex-col items-center justify-between text-center min-h-[170px] transition-all duration-300 shadow-xl ${
-            getCardActiveState('agent_engine') === 'ACTIVE'
-              ? 'bg-[#B4BEFE] ring-4 ring-amber-400 scale-105 shadow-[0_0_30px_rgba(245,158,11,0.4)]'
-              : 'bg-[#B4BEFE]/95 hover:bg-[#B4BEFE]'
-          }`}>
-            <div className="w-14 h-14 rounded-full bg-black/10 flex items-center justify-center mb-3">
-              <span className="text-base font-extrabold italic tracking-tighter text-black font-serif">
-                crewai
-              </span>
-            </div>
-            <span className="text-xs font-black uppercase tracking-wider text-black font-heading">
-              CREW AI AGENT
-            </span>
-          </div>
-
-          {/* Node 4: RESPONSE */}
-          <div className={`p-6 rounded-[24px] flex flex-col items-center justify-between text-center min-h-[170px] transition-all duration-300 shadow-xl ${
-            getCardActiveState('response') === 'ACTIVE' || activeStepIndex >= 8
-              ? 'bg-[#B4BEFE] ring-4 ring-emerald-400 scale-105 shadow-[0_0_30px_rgba(16,185,129,0.4)]'
-              : 'bg-[#B4BEFE]/95 hover:bg-[#B4BEFE]'
-          }`}>
-            <div className="w-14 h-14 rounded-full bg-black/10 flex items-center justify-center mb-3">
-              <svg className="w-7 h-7 text-black" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
-              </svg>
-            </div>
-            <span className="text-xs font-black uppercase tracking-wider text-black font-heading">
-              RESPONSE
-            </span>
-          </div>
-
-        </div>
-      </div>
-
-      {/* Live Step Execution Telemetry Bar */}
-      <div className="pt-4 border-t border-white/10 space-y-4">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-bold text-zinc-300 font-heading">
-            Sub-Agent Execution Nodes Telemetry:
-          </span>
-          <span className="text-[11px] font-mono text-amber-400 font-semibold">
-            Active: {activeNode}
-          </span>
-        </div>
-
-        {/* 8 Step Micro-Nodes Progress */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
-          {stepsList.map((st) => {
-            const isDone = activeStepIndex > st.step;
-            const isCurrent = Math.floor(activeStepIndex) === st.step;
-
-            return (
-              <div
-                key={st.step}
-                className={`p-2.5 rounded-xl border text-center transition-all ${
-                  isCurrent
-                    ? 'bg-amber-500/20 border-amber-500 text-amber-300 shadow-[0_0_10px_rgba(245,158,11,0.3)] animate-pulse'
-                    : isDone
-                    ? 'bg-zinc-900 border-emerald-500/40 text-emerald-400'
-                    : 'bg-zinc-950 border-white/5 text-zinc-600'
-                }`}
-              >
-                <div className="text-[10px] font-mono font-bold">{st.step}/8</div>
-                <div className="text-[11px] font-bold text-white leading-snug mt-0.5 truncate">
-                  {st.node}
+          return (
+            <div
+              key={stg.id}
+              onClick={() => setSelectedStage(isSelected ? null : stg.id)}
+              className={`p-5 rounded-2xl border transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-4 ${
+                stStatus === 'ACTIVE'
+                  ? 'bg-zinc-900/90 border-amber-500/60 shadow-[0_0_25px_rgba(255,149,0,0.15)] ring-1 ring-amber-500/30'
+                  : stStatus === 'COMPLETED'
+                  ? 'bg-zinc-900/50 border-emerald-500/30 hover:border-emerald-500/50'
+                  : 'bg-zinc-950/40 border-white/5 opacity-60 hover:opacity-100 hover:border-white/10'
+              }`}
+            >
+              {/* Top Header of Stage Card */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className={`p-2 rounded-xl border ${
+                    stStatus === 'ACTIVE'
+                      ? 'bg-amber-500/20 border-amber-500/40 text-amber-400'
+                      : stStatus === 'COMPLETED'
+                      ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                      : 'bg-zinc-900 border-white/10 text-zinc-500'
+                  }`}>
+                    {stg.icon}
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold font-mono text-zinc-500 uppercase tracking-widest block">
+                      STAGE {stg.stageNum}
+                    </span>
+                    <h4 className="text-xs font-bold text-white font-heading leading-snug">
+                      {stg.title}
+                    </h4>
+                  </div>
                 </div>
+
+                <span className={`w-2 h-2 rounded-full ${
+                  stStatus === 'ACTIVE'
+                    ? 'bg-amber-500 animate-ping'
+                    : stStatus === 'COMPLETED'
+                    ? 'bg-emerald-500'
+                    : 'bg-zinc-700'
+                }`}></span>
               </div>
-            );
-          })}
+
+              {/* Subtitle */}
+              <p className="text-[11px] text-zinc-400 font-medium leading-relaxed">
+                {stg.subtitle}
+              </p>
+
+              {/* Internal Micro Nodes list */}
+              <div className="space-y-1.5 pt-2 border-t border-white/5">
+                {stg.nodes.map((nd, nIdx) => {
+                  const nodeDone = activeStepIndex > nd.step;
+                  const nodeActive = Math.floor(activeStepIndex) === nd.step;
+
+                  return (
+                    <div
+                      key={nIdx}
+                      className={`px-2.5 py-1.5 rounded-lg flex items-center justify-between text-[11px] font-medium transition-all ${
+                        nodeActive
+                          ? 'bg-amber-500/10 text-amber-300 font-bold border border-amber-500/30'
+                          : nodeDone
+                          ? 'text-zinc-300'
+                          : 'text-zinc-600'
+                      }`}
+                    >
+                      <span className="truncate max-w-[140px]">{nd.label}</span>
+                      <span className="font-mono text-[10px] shrink-0">
+                        {nodeActive ? '⚡ ACTIVE' : nodeDone ? '✓ DONE' : 'QUEUED'}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Bottom status line */}
+              <div className="flex items-center justify-between pt-1 text-[10px] font-mono text-zinc-500 border-t border-white/5">
+                <span>Steps {stg.stepRange[0]}–{stg.stepRange[1]}</span>
+                <span className={stStatus === 'ACTIVE' ? 'text-amber-400 font-bold' : stStatus === 'COMPLETED' ? 'text-emerald-400' : ''}>
+                  {stStatus}
+                </span>
+              </div>
+
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Direct Flow Connector Arrow Bar */}
+      <div className="hidden lg:flex items-center justify-between px-8 py-2 bg-zinc-950/60 rounded-xl border border-white/5 text-xs text-zinc-400 font-mono">
+        <div className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <span>01. Ingestion</span>
         </div>
+        <span className="text-zinc-600 font-bold">➔</span>
+        <div className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+          <span>02. Context Router</span>
+        </div>
+        <span className="text-zinc-600 font-bold">➔</span>
+        <div className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+          <span>03. Fan-Out Agents</span>
+        </div>
+        <span className="text-zinc-600 font-bold">➔</span>
+        <div className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <span>04. Synthesis Brief</span>
+        </div>
+      </div>
+
+      {/* Footer Meta */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 border-t border-white/10 text-xs text-zinc-400 font-medium">
+        <span className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+          Framework: <strong className="text-zinc-200">Mistral AI + LangGraph Orchestrator</strong>
+        </span>
+        <span className="text-zinc-500 font-mono text-[11px]">
+          Parallel Execution • Quality Audit Feedback Loop
+        </span>
       </div>
 
     </div>
