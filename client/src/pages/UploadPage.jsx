@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../context/AppContext';
 
 export const UploadPage = () => {
   const navigate = useNavigate();
+  const { uploadAndAnalyze, isProcessing } = useAppContext();
   const [arxivUrl, setArxivUrl] = useState('');
-  const [loading, setLoading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
 
   const samplePapers = [
@@ -16,37 +17,19 @@ export const UploadPage = () => {
   const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setLoading(true);
 
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      await fetch('/api/documents/upload', { method: 'POST', body: formData });
-      setLoading(false);
-      navigate('/report');
-    } catch (err) {
-      setLoading(false);
-      navigate('/report');
-    }
+    const formData = new FormData();
+    formData.append('file', file);
+    await uploadAndAnalyze(formData);
+    navigate('/report');
   };
 
   const handleUrlSubmit = async (e) => {
     e.preventDefault();
     if (!arxivUrl) return;
-    setLoading(true);
 
-    try {
-      await fetch('/api/documents/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: arxivUrl })
-      });
-      setLoading(false);
-      navigate('/report');
-    } catch (err) {
-      setLoading(false);
-      navigate('/report');
-    }
+    await uploadAndAnalyze({ url: arxivUrl });
+    navigate('/report');
   };
 
   return (
@@ -84,13 +67,13 @@ export const UploadPage = () => {
             📄
           </div>
           <h3 className="text-lg font-bold text-white font-heading mb-1">
-            {loading ? 'Analyzing Manuscript...' : 'Drop PDF File Here'}
+            {isProcessing ? 'Analyzing Manuscript via 5 LLM Agents...' : 'Drop PDF File Here'}
           </h3>
           <p className="text-xs text-zinc-400 max-w-sm mb-6">
             Supports multi-page research PDFs, LaTeX manuscripts, and preprints up to 50MB.
           </p>
           <div className="px-6 py-2.5 noteo-pill-btn text-xs font-bold font-heading group-hover:border-amber-500 transition-colors">
-            Choose Local File
+            {isProcessing ? 'Processing Pipeline...' : 'Choose Local File'}
           </div>
           <input type="file" accept=".pdf" onChange={handleFileUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
         </label>
@@ -117,10 +100,10 @@ export const UploadPage = () => {
               </div>
               <button
                 type="submit"
-                disabled={loading}
+                disabled={isProcessing}
                 className="w-full noteo-primary-btn py-2.5 text-xs font-bold cursor-pointer disabled:opacity-50"
               >
-                {loading ? 'Fetching Paper...' : 'Import & Analyze'}
+                {isProcessing ? 'Fetching & Parsing...' : 'Import & Analyze'}
               </button>
             </form>
           </div>
@@ -150,3 +133,4 @@ export const UploadPage = () => {
     </div>
   );
 };
+

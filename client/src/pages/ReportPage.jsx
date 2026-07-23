@@ -1,36 +1,14 @@
 import React, { useState } from 'react';
 import { FloatingExportBar } from '../components/common/FloatingExportBar';
+import { useAppContext } from '../context/AppContext';
 
 export const ReportPage = () => {
   const [activeSection, setActiveSection] = useState('all');
+  const { currentBrief } = useAppContext();
 
-  const brief = {
-    metadata: {
-      title: "Scaling Transformer Architectures via Recursive Sub-layering",
-      authors: ["Ashish Vaswani", "Noam Shazeer", "Niki Parmar", "Jakob Uszkoreit"],
-      year: 2023,
-      venue: "NeurIPS 2023"
-    },
-    executiveSummary: 'This analysis explores the core methodologies presented in "Efficient Transformers via Recursive Sub-layering." The paper introduces a novel approach to attention mechanisms that reduces computational complexity from O(n²) to O(n log n) without significant accuracy loss. Benchmark results are verified against the SQuAD 2.0 dataset, finding a 1.2% variance from reported values.',
-    researchAnalysis: {
-      problemStatement: "Recursive Layer Normalization applied before multi-head attention.",
-      coreHypothesis: "Sparsity-aware pruning of attention heads based on importance scoring.",
-      methodology: "Constructing a state-based multi-agent graph to analyze section chunks in parallel.",
-      keyFindings: "Dynamic token merging for long-context windows up to 128k tokens with 94.2% accuracy."
-    },
-    citations: [
-      { title: "Attention Is All You Need. NIPS.", authors: "[Vaswani et al., 2017]", year: "2017" },
-      { title: "Reformer: The Efficient Transformer. ICLR.", authors: "[Kitaev et al., 2020]", year: "2020" },
-      { title: "Generating Long Sequences with Sparse Transformers.", authors: "[Child et al., 2019]", year: "2019" }
-    ],
-    keyInsights: [
-      { takeaway: "The sub-layering technique can be integrated into existing BERT pipelines with <10% code modification." },
-      { takeaway: "Reduced precision in long-context merging may lead to slight degradation in specific semantic tasks." }
-    ],
-    markdownContent: `# Synthesis Report: Scaling Transformer Architectures...`
-  };
-
+  const brief = currentBrief || {};
   const { metadata, executiveSummary, researchAnalysis, citations, keyInsights } = brief;
+
 
   return (
     <div className="max-w-[850px] mx-auto px-6 pt-16 pb-28 space-y-8 animate-noteo-fade">

@@ -3,8 +3,11 @@ import { LiveWorkflowGraph } from '../components/workflow/LiveWorkflowGraph';
 import { AgentTerminal } from '../components/workflow/AgentTerminal';
 import { MetricsOverview } from '../components/common/MetricsOverview';
 import { TokenAnalyticsCard } from '../components/workflow/TokenAnalyticsCard';
+import { useAppContext } from '../context/AppContext';
 
 export const WorkflowPage = () => {
+  const { currentRun, isProcessing, currentBrief } = useAppContext();
+
   return (
     <div className="max-w-6xl mx-auto px-6 pt-16 pb-24 space-y-10 animate-noteo-fade">
       
@@ -18,18 +21,22 @@ export const WorkflowPage = () => {
         </p>
       </div>
 
-      <MetricsOverview />
+      <MetricsOverview analytics={currentBrief?.analytics} />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-7 space-y-6">
-          <LiveWorkflowGraph activeNode="Synthesizer" status="COMPLETED" />
+          <LiveWorkflowGraph 
+            activeNode={currentRun?.activeNode || 'Synthesizer'} 
+            status={currentRun?.status || 'COMPLETED'} 
+          />
           <TokenAnalyticsCard />
         </div>
         <div className="lg:col-span-5">
-          <AgentTerminal isProcessing={false} />
+          <AgentTerminal isProcessing={isProcessing} />
         </div>
       </div>
 
     </div>
   );
 };
+
