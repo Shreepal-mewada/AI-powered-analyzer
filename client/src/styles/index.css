@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    background-color: #0A0A0C;
+    color: #F4F4F5;
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "SF Pro Display", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.01em;
+  }
+
+  h1, h2, h3, h4, h5, h6, .font-heading {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "SF Pro Display", sans-serif;
+    letter-spacing: -0.025em;
+  }
+}
+
+.noteo-bg {
+  background-color: #0A0A0C;
+}
+
+.noteo-card {
+  background-color: #121215;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.25rem;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.noteo-card:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  background-color: #16161A;
+}
+
+.noteo-amber-glow {
+  color: #FF9500;
+  text-shadow: 0 0 40px rgba(255, 149, 0, 0.25);
+}
+
+.noteo-pill-btn {
+  background-color: #27272A;
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+}
+
+.noteo-pill-btn:hover {
+  background-color: #3F3F46;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.noteo-primary-btn {
+  background-color: #FFFFFF;
+  color: #0A0A0C;
+  border-radius: 9999px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.noteo-primary-btn:hover {
+  background-color: #E4E4E7;
+}
+
+.noteo-glass {
+  background: rgba(10, 10, 12, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.terminal-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.terminal-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.terminal-scroll::-webkit-scrollbar-thumb {
+  background: #3F3F46;
+  border-radius: 9999px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-noteo-fade {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.prose-noteo {
+  line-height: 1.8;
+  color: #D4D4D8;
+  font-size: 0.95rem;
+}
+
+.prose-noteo p {
+  margin-bottom: 1.35rem;
+}
+
+
+
