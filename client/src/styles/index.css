@@ -96,9 +96,24 @@
   font-size: 0.95rem;
 }
 
-.prose-noteo p {
-  margin-bottom: 1.35rem;
+@keyframes dashFlow {
+  from { stroke-dashoffset: 24; }
+  to { stroke-dashoffset: 0; }
 }
+
+.animate-dash-flow {
+  animation: dashFlow 1s linear infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
 
 
 
