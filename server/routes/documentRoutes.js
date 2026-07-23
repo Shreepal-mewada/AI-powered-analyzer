@@ -1,7 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import fs from 'fs';
-import { uploadDocument, getDocumentById } from '../controllers/documentController.js';
+import { uploadDocument, analyzeDocument, getDocumentById } from '../controllers/documentController.js';
 
 // Ensure uploads folder exists
 if (!fs.existsSync('uploads')) {
@@ -14,7 +14,7 @@ const upload = multer({ dest: 'uploads/' });
 const router = express.Router();
 
 router.post('/upload', upload.single('file'), uploadDocument);
+router.post('/analyze', analyzeDocument);
 router.get('/:id', getDocumentById);
 
 export default router;
-

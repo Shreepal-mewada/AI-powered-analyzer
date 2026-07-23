@@ -20,17 +20,19 @@ export const UploadPage = () => {
 
     const formData = new FormData();
     formData.append('file', file);
+    navigate('/workflow');
     await uploadAndAnalyze(formData);
-    navigate('/report');
+    if (e.target) e.target.value = '';
   };
 
   const handleUrlSubmit = async (e) => {
     e.preventDefault();
     if (!arxivUrl) return;
 
+    navigate('/workflow');
     await uploadAndAnalyze({ url: arxivUrl });
-    navigate('/report');
   };
+
 
   return (
     <div className="max-w-4xl mx-auto px-6 pt-16 pb-24 space-y-10 animate-noteo-fade">

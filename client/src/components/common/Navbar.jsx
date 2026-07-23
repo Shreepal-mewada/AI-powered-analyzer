@@ -6,16 +6,16 @@ export const Navbar = () => {
 
   const navLinks = [
     { to: '/', label: 'About' },
-    { to: '/#how-it-works', label: 'How It Works', isHash: true },
+    // { to: '/#how-it-works', label: 'How It Works', isHash: true },
     { to: '/upload', label: 'Upload Paper' },
     { to: '/report', label: 'Synthesis Brief' },
     { to: '/workflow', label: 'AI Execution DAG' },
-    { to: '/faq', label: 'FAQ' }
+    // { to: '/faq', label: 'FAQ' }
   ];
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 h-20 noteo-glass border-b border-white/10 flex items-center justify-between px-6 lg:px-16">
-      
+
       {/* Brand Logo */}
       <NavLink to="/" className="flex items-center gap-3 group">
         <div className="w-8 h-8 rounded-lg bg-white text-black flex items-center justify-center font-extrabold text-sm font-heading shadow-md">
@@ -50,8 +50,7 @@ export const Navbar = () => {
               key={idx}
               to={link.to}
               className={({ isActive }) =>
-                `text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
-                  isActive ? 'text-white font-semibold border-b border-amber-500 pb-0.5' : 'text-zinc-400 hover:text-white'
+                `text-xs sm:text-sm font-medium transition-colors cursor-pointer ${isActive ? 'text-white font-semibold border-b border-amber-500 pb-0.5' : 'text-zinc-400 hover:text-white'
                 }`
               }
             >
@@ -63,14 +62,14 @@ export const Navbar = () => {
 
       {/* Right Action Button */}
       <div className="flex items-center gap-3">
-        <button 
+        <button
           onClick={() => navigate('/upload')}
           className="px-5 py-2.5 noteo-pill-btn text-xs font-semibold hover:border-white/30 cursor-pointer shadow-sm"
         >
           Sign In
         </button>
 
-        <button 
+        <button
           onClick={() => navigate('/upload')}
           className="hidden sm:block px-5 py-2.5 noteo-primary-btn text-xs font-bold cursor-pointer hover:bg-zinc-200 active:scale-98 transition-all"
         >

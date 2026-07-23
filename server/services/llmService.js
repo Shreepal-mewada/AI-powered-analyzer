@@ -60,45 +60,43 @@ export const invokeLLM = async ({ systemPrompt, userPrompt, temperature = 0.2, e
 
   const mockPayloads = {
     parser: {
-      title: "Attention Is All You Need: Scalable Multi-Agent Neural Architectures",
-      authors: ["Ashish Vaswani", "Noam Shazeer", "Niki Parmar", "Jakob Uszkoreit"],
-      year: 2023,
-      venue: "NeurIPS 2023",
-      abstract: "We propose a novel multi-agent neural architecture that replaces traditional recurrent pipelines with parallel self-attention mechanisms and automated quality control feedback loops."
+      title: "Research Paper Analysis",
+      authors: ["Unknown Author"],
+      year: new Date().getFullYear(),
+      venue: "Academic Journal",
+      abstract: "Abstract not extracted — Mistral API unavailable. Please check your API key or retry."
     },
     analyzer: {
-      problemStatement: "Traditional sequential multi-agent AI pipelines suffer from compounding context window latency, exponential token costs, and high hallucination rates during document synthesis.",
-      coreHypothesis: "Parallelizing domain-specific agent execution while delegating quality control to a dedicated peer-reviewer agent significantly improves precision while reducing total processing time by up to 65%.",
-      methodology: "We construct a state-based multi-agent graph using LangGraph. Context is filtered via a semantic chunking engine and routed selectively to parallel sub-agents.",
-      experiments: "Evaluated across 150 arXiv academic research papers in Computer Science and Machine Learning. Baselines included standard single-pass LLM prompts and zero-shot CrewAI setups.",
-      keyFindings: "Achieved a 94.2% factual accuracy score on benchmark extractions while reducing average token consumption per document from 45,000 to 12,500 tokens."
+      problemStatement: "Unable to extract — Mistral API rate limit reached. Retry after 30 seconds.",
+      coreHypothesis: "Not specified in document (API unavailable).",
+      methodology: "Not specified in document (API unavailable).",
+      experiments: "Not specified in document (API unavailable).",
+      keyFindings: "Not specified in document (API unavailable)."
     },
     summary: {
-      executiveSummary: "This paper presents a scalable multi-agent neural workflow framework designed for automated academic research analysis. By replacing single-prompt document summarization with a parallelized LangGraph state machine, the system achieves sub-20-second document extraction with automated quality control. Experimental evaluations across 150 academic papers demonstrate a 94.2% accuracy rate, robust handling of 50+ page PDFs via semantic section chunking, and a 65% reduction in total token overhead."
+      executiveSummary: "AI extraction unavailable — Mistral API rate limit (429) reached. Please wait 30–60 seconds and re-upload your document. Check your Mistral API plan at console.mistral.ai for higher rate limits."
     },
     citation: {
       citations: [
-        { title: "LangGraph: Building State-Based Multi-Agent Workflows", authors: "LangChain Team", year: "2024", relevance: "Core framework for graph node orchestration and conditional routing" },
-        { title: "Mistral 7B: Efficient Open-Weight Language Models", authors: "Jiang et al.", year: "2023", relevance: "Base model backbone for JSON extraction and quality evaluation" },
-        { title: "PyPDF & Layout-Aware Document Parsing", authors: "Fenner et al.", year: "2022", relevance: "Foundational methodology for structural heading detection and text extraction" }
+        { title: "Citations unavailable — API rate limit reached", authors: "N/A", year: "N/A", relevance: "Retry after 30 seconds." }
       ]
     },
     insight: {
       keyInsights: [
-        { takeaway: "Parallel agent graph execution reduces end-to-end processing latency by over 60%.", implication: "SaaS platforms can deliver real-time literature reviews without timing out.", application: "Enterprise R&D literature analysis and IP research." },
-        { takeaway: "Selective context routing prevents context window bloat and reduces LLM hallucinations.", implication: "Agents perform better when restricted to relevant section chunks rather than raw 100-page texts.", application: "Automated due-diligence for legal and medical papers." }
+        { takeaway: "AI insights unavailable — Mistral API rate limit reached.", implication: "Retry after 30-60 seconds.", application: "Check console.mistral.ai for usage." }
       ]
     },
     reviewer: {
-      accuracyScore: 9.2,
-      completenessScore: 9.0,
-      clarityScore: 9.5,
-      overallScore: 9.2,
-      confidenceScore: 94,
+      accuracyScore: 5.0,
+      completenessScore: 5.0,
+      clarityScore: 5.0,
+      overallScore: 5.0,
+      confidenceScore: 50,
       approved: true,
-      feedback: "Outputs match ground-truth paper text accurately. Methodology and quantitative metrics are cleanly extracted."
+      feedback: "Fallback mode — Mistral API unavailable."
     }
   };
+
 
   const payload = mockPayloads[expectedAgentType] || mockPayloads.analyzer;
 
