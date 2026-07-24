@@ -51,19 +51,19 @@ export const FloatingExportBar = ({ brief }) => {
   };
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 max-w-[95vw] floating-export-bar">
-      <div className="bg-zinc-900 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-full flex items-center gap-2 sm:gap-4 shadow-2xl ring-1 ring-white/10 backdrop-blur-md">
-
-        <span className="text-xs sm:text-sm font-semibold whitespace-nowrap pl-1 text-zinc-300">
+    <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 max-w-[96vw] sm:max-w-[95vw] floating-export-bar">
+      <div className="bg-zinc-900 text-white px-3 sm:px-6 py-2 sm:py-3 rounded-full flex items-center gap-1.5 sm:gap-4 shadow-2xl ring-1 ring-white/10 backdrop-blur-md">
+        
+        <span className="text-[11px] sm:text-sm font-semibold whitespace-nowrap pl-1 text-zinc-300 hidden xs:inline">
           Export Brief
         </span>
-
-        <div className="h-5 w-[1px] bg-white/20"></div>
+        
+        <div className="h-4 sm:h-5 w-[1px] bg-white/20 hidden xs:block"></div>
 
         <div className="flex items-center gap-1 sm:gap-2">
           <button
             onClick={handleCopy}
-            className="px-3 py-1.5 hover:bg-white/10 rounded-full flex items-center gap-1.5 transition-colors cursor-pointer text-xs font-medium"
+            className="px-2.5 sm:px-3 py-1 sm:py-1.5 hover:bg-white/10 rounded-full flex items-center gap-1 sm:gap-1.5 transition-colors cursor-pointer text-[11px] sm:text-xs font-medium"
           >
             {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-zinc-300" />}
             <span>{copied ? 'Copied' : 'Copy'}</span>
@@ -71,7 +71,7 @@ export const FloatingExportBar = ({ brief }) => {
 
           <button
             onClick={() => handleDownload('md')}
-            className="px-3 py-1.5 hover:bg-white/10 rounded-full flex items-center gap-1.5 transition-colors cursor-pointer text-xs font-medium"
+            className="px-2.5 sm:px-3 py-1 sm:py-1.5 hover:bg-white/10 rounded-full flex items-center gap-1 sm:gap-1.5 transition-colors cursor-pointer text-[11px] sm:text-xs font-medium"
           >
             <FileText className="w-3.5 h-3.5 text-amber-400" />
             <span>Markdown</span>
@@ -79,7 +79,7 @@ export const FloatingExportBar = ({ brief }) => {
 
           <button
             onClick={() => handleDownload('pdf')}
-            className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-black rounded-full flex items-center gap-1.5 transition-colors cursor-pointer text-xs font-bold shadow-md active:scale-95"
+            className="px-3 sm:px-3.5 py-1 sm:py-1.5 bg-amber-500 hover:bg-amber-400 text-black rounded-full flex items-center gap-1 sm:gap-1.5 transition-colors cursor-pointer text-[11px] sm:text-xs font-bold shadow-md active:scale-95"
           >
             <Download className="w-3.5 h-3.5" />
             <span>PDF</span>
@@ -87,7 +87,7 @@ export const FloatingExportBar = ({ brief }) => {
 
           <button
             onClick={() => handleDownload('json')}
-            className="px-3 py-1.5 hover:bg-white/10 rounded-full flex items-center gap-1.5 transition-colors cursor-pointer text-xs font-medium"
+            className="px-2.5 sm:px-3 py-1 sm:py-1.5 hover:bg-white/10 rounded-full flex items-center gap-1 sm:gap-1.5 transition-colors cursor-pointer text-[11px] sm:text-xs font-medium"
           >
             <Code className="w-3.5 h-3.5 text-blue-400" />
             <span>JSON</span>
