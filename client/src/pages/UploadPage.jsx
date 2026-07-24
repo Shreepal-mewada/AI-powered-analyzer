@@ -14,23 +14,23 @@ export const UploadPage = () => {
     { title: 'Llama 2: Open Foundation and Fine-Tuned Chat Models', arxiv: '2307.09288', venue: 'arXiv 2023' }
   ];
 
-  const handleFileUpload = async (e) => {
+  const handleFileUpload = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     const formData = new FormData();
     formData.append('file', file);
+    uploadAndAnalyze(formData);
     navigate('/workflow');
-    await uploadAndAnalyze(formData);
     if (e.target) e.target.value = '';
   };
 
-  const handleUrlSubmit = async (e) => {
+  const handleUrlSubmit = (e) => {
     e.preventDefault();
     if (!arxivUrl) return;
 
+    uploadAndAnalyze({ url: arxivUrl });
     navigate('/workflow');
-    await uploadAndAnalyze({ url: arxivUrl });
   };
 
 

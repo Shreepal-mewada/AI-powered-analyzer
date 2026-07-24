@@ -66,22 +66,36 @@ export const AppProvider = ({ children }) => {
     setIsProcessing(true);
     setHasActiveUploadSession(true);
     setActiveStepIndex(1);
-    addLog('Step 1/8 [Upload]: Ingestion request received...');
 
+    let filename = 'Uploaded_Paper.pdf';
+    if (uploadPayload instanceof FormData) {
+      const fileObj = uploadPayload.get('file');
+      if (fileObj && fileObj.name) filename = fileObj.name;
+    } else if (uploadPayload?.url) {
+      filename = uploadPayload.url.split('/').pop() || uploadPayload.url;
+    } else if (uploadPayload?.title) {
+      filename = uploadPayload.title;
+    }
+
+    // Set preliminary document right away so /workflow page renders immediately
+    setCurrentDocument({
+      originalName: filename,
+      pageCount: 1,
+      chunksCount: 0,
+      isPending: true
+    });
+
+    addLog('Step 1/8 [Upload]: Ingestion request received...');
 
     try {
       let docRes;
-      let filename = 'Uploaded_Paper.pdf';
 
       // ── Step 1-2: Upload & Parse ─────────────────────────────────────────
       if (uploadPayload instanceof FormData) {
-        const fileObj = uploadPayload.get('file');
-        if (fileObj && fileObj.name) filename = fileObj.name;
         addLog(`Step 2/8 [PDF Parser]: Parsing "${filename}"...`);
         setActiveStepIndex(2);
         docRes = await uploadPDF(uploadPayload);
       } else if (uploadPayload?.url) {
-        filename = uploadPayload.url.split('/').pop() || uploadPayload.url;
         addLog(`Step 2/8 [PDF Parser]: Fetching from ${uploadPayload.url}...`);
         setActiveStepIndex(2);
         docRes = await uploadRawText(uploadPayload);

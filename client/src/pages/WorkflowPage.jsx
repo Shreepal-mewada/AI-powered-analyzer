@@ -18,7 +18,7 @@ export const WorkflowPage = () => {
     }
   }, [activeStepIndex, isProcessing, hasActiveUploadSession, navigate, setHasActiveUploadSession]);
 
-  if (!currentDocument) {
+  if (!currentDocument && !isProcessing) {
     return (
       <div className="max-w-xl mx-auto px-4 sm:px-6 pt-20 sm:pt-24 pb-28 text-center animate-noteo-fade">
         <div className="noteo-card p-6 sm:p-10 space-y-6">
