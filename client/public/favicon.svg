@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+  <defs>
+    <linearGradient id="optimus-logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF9500" />
+      <stop offset="100%" stop-color="#8B5CF6" />
+    </linearGradient>
+    <style>
+      .chevron {
+        stroke: #ffffff;
+      }
+    </style>
+  </defs>
+  
+  <!-- Sandbox Container (Hexagon) -->
+  <path
+    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+    stroke="url(#optimus-logo-grad)"
+    stroke-width="2.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="url(#optimus-logo-grad)"
+    fill-opacity="0.12"
+  />
+
+  <!-- Coding Chevron -->
+  <path
+    class="chevron"
+    d="M8 8.5L11.5 12L8 15.5"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- AI Spark -->
+  <path
+    d="M15 9.5Q15 12 17.5 12Q15 12 15 14.5Q15 12 12.5 12Q15 12 15 9.5Z"
+    fill="url(#optimus-logo-grad)"
+  />
+</svg>
