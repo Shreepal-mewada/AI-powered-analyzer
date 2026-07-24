@@ -3,20 +3,20 @@ import React, { useState } from 'react';
 export const FaqPage = () => {
   const faqs = [
     {
-      q: "How does ScholarSense summarize research papers?",
-      a: "Our system tokenizes PDF manuscripts into section chunks and runs 5 parallel LLM agents. Each agent specializes in a distinct layer: parsing math formulas, auditing methodology logic, verifying references against arXiv databases, and composing an executive brief."
+      q: "How does Vilambo summarize research papers?",
+      a: "Vilambo uses a multi-agent LangGraph workflow running on LLM backbones like Mistral AI and GPT-4. It breaks manuscripts into semantic chunks, extracts methodology, cross-references claims, and synthesizes structured executive briefs."
     },
     {
       q: "Can I import papers directly using arXiv IDs?",
       a: "Yes! Simply paste any arXiv paper ID or URL (e.g. 2310.08921) into the Upload Studio. Our engine automatically fetches the full preprint, metadata, and citation tree."
     },
     {
-      q: "How are citations verified?",
-      a: "The Citation Verifier agent cross-references cited paper titles, authors, and published benchmarks against Google Scholar and arXiv repositories to ensure citations are real and correctly interpreted."
+      q: "Can I upload any academic PDF or arXiv paper?",
+      a: "Yes. You can drag and drop any research PDF (up to 50MB) or paste an arXiv paper link/ID to initiate instant parallel analysis."
     },
     {
-      q: "Is my uploaded PDF manuscript kept private?",
-      a: "Yes. Manuscripts uploaded to ScholarSense are processed ephemerally for your session and are never sold or used to train public models."
+      q: "Is my uploaded paper private and secure?",
+      a: "Yes. Manuscripts uploaded to Vilambo are processed ephemerally for your session and are never sold or used to train public models."
     },
     {
       q: "What export formats are supported?",

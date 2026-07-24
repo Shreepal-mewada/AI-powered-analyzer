@@ -30,7 +30,7 @@ export function App() {
 
           {/* Simple Clean Footer */}
           <footer className="py-8 border-t border-white/10 text-center text-xs text-zinc-500 space-y-1">
-            <p>© 2026 ScholarSense Inc. Multi-Agent Research Intelligence Engine.</p>
+            <p>© 2026 Vilambo Inc. Multi-Agent Research Intelligence Engine.</p>
             <p className="text-zinc-600">Privacy & Terms • Ephemeral Parsing Mode</p>
           </footer>
 

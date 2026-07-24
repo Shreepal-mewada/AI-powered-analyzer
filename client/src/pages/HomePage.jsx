@@ -49,7 +49,7 @@ export const HomePage = () => {
           </div>
 
           <p className="text-base sm:text-lg text-zinc-300 font-normal max-w-2xl mx-auto leading-relaxed">
-            Upload any PDF manuscript or import an arXiv paper. ScholarSense deploys specialized AI agents to extract core methodology, audit claims, and generate verified executive briefs.
+            Upload any PDF manuscript or import an arXiv paper. Vilambo deploys specialized AI agents to extract core methodology, audit claims, and generate verified executive briefs.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
@@ -87,7 +87,7 @@ export const HomePage = () => {
         <div className="text-center space-y-3">
           <span className="text-xs font-bold text-amber-500 uppercase tracking-widest font-heading">Workflow</span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white font-heading tracking-tight">
-            How ScholarSense Works
+            How Vilambo Works
           </h2>
           <p className="text-sm text-zinc-400 max-w-lg mx-auto">
             3 simple steps to transform complex academic papers into actionable synthesis briefs

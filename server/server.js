@@ -30,7 +30,7 @@ app.use('/api/briefs', briefRoutes);
 // Connect DB & Start Express Server
 connectDB().then(() => {
   app.listen(config.port, () => {
-    console.log(`🚀 Server running on port ${config.port}`);
-    console.log(`📡 Health Check: http://localhost:${config.port}/api/health`);
+    console.log(`Server running on port ${config.port}`);
+    console.log(`Health Check: http://localhost:${config.port}/api/health`);
   });
 });

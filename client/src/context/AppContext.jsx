@@ -8,7 +8,7 @@ const defaultBrief = {
   docType: 'paper',
   metadata: {
     title: 'Upload a Research Paper to Begin',
-    authors: ['ScholarSense AI'],
+    authors: ['Vilambo AI'],
     year: new Date().getFullYear(),
     venue: 'Academic Research Journal'
   },
@@ -53,7 +53,7 @@ export const AppProvider = ({ children }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [hasActiveUploadSession, setHasActiveUploadSession] = useState(false);
   const [logs, setLogs] = useState([
-    '[INIT] ScholarSense Multi-Agent Engine v2.0 Ready',
+    '[INIT] Vilambo Multi-Agent Engine v2.0 Ready',
     '[AGENT] Mistral AI Context Router Initialized',
     '[READY] Standby for manuscript ingestion...'
   ]);
